@@ -25,6 +25,8 @@ services:
 networks:
   ip6:
     driver: macvlan
+    enable_ipv4: false
+    enable_ipv6: true
     driver_opts:
       parent: "eno1"
   ip6br1:
