@@ -54,6 +54,16 @@ docker build -t v6tprouter:latest .
 
 启动配置文件参考 (Start configuration file reference) [docker-compose.yml](docker-compose.yml)
 
+如果子网无法通信, 尝试添加以下配置到 (If the subnet cannot communicate, try adding the following configuration to) `/etc/docker/daemon.json`
+
+> docker 官网说明, 在 28 较新版本中, 当主机没有启用 ipv6 转发时, 不会开启禁用转发功能 (According to the Docker official website, in the latest version 28, when the host does not enable IPv6 forwarding, the disable forwarding function will not be enabled)
+
+```json
+{
+  "ip6tables": false
+}
+```
+
 ## 配置 (Configuration)
 
 | 环境变量 (Variable)  | 描述 (Description)                                                  | 默认值 (Default) |
