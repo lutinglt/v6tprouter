@@ -1,0 +1,21 @@
+[package]
+name = "v6tprouter"
+authors = ["luting"]
+version = "2.0.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0.98"
+askama = "0.14.0"
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.140"
+tracing = "0.1.41"
+tracing-subscriber = { version = "0.3.19", features = ["env-filter", "chrono"] }
+
+[profile.release]
+codegen-units = 1
+debug = false
+lto = "fat"
+opt-level = "z"
+strip = "symbols"
+panic = "abort"

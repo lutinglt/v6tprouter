@@ -1,32 +1,19 @@
 services:
-  ipv6lanrouter:
-    image: lutinglt/ipv6lanrouter:latest
-    container_name: ipv6lanrouter
-    hostname: ipv6lanrouter
-    restart: on-failure
+  v6tprouter:
+    image: v6tprouter:latest
+    container_name: v6tprouter
+    hostname: v6tprouter
+    restart: on-failure:3
+    privileged: true
     networks:
-#  macvlan is WAN(Interfaces capable of obtaining IPv6 global addresses)
-      macvlan:
-        ipv4_address: *.*.*.*
-#  bridge is LAN(Interfaces that cannot obtain IPv6 global addresses)
-      bridge1:
-        ipv4_address: *.*.*.*
-      bridge2:
-        ipv4_address: *.*.*.*
-      bridge3:
-        ipv4_address: *.*.*.*
+      - ip6
+      - ip6br1
+      - ip6br2
+      - ip6br3
     environment:
       - TZ=Asia/Shanghai
-      - CHECK=3
-      - LAN_MODE=docker
-      - PREFIXLEN=60
-      - MTU=0
-      - RDNSS=*:*:*:*;*:*:*:*;
-      - EXCLUDE_SUB=00;01;02;03;...;
-      - EXCLUDE_NUM1=0;1;2;3;...;
-      - EXCLUDE_NUM2=0;1;2;3;...;
-    cap_add:
-      - NET_ADMIN
+      # - PREFIX_LEN=56
+      # - RUST_LOG=debug
     sysctls:
       - "net.ipv6.conf.all.forwarding=1"
       - "net.ipv6.conf.all.proxy_ndp=1"
@@ -34,3 +21,27 @@ services:
       - "net.ipv6.conf.default.forwarding=1"
       - "net.ipv6.conf.default.proxy_ndp=1"
       - "net.ipv6.conf.default.accept_ra=2"
+
+networks:
+  ip6:
+    driver: macvlan
+    driver_opts:
+      parent: "eno1"
+  ip6br1:
+    enable_ipv4: false
+    enable_ipv6: true
+    driver_opts:
+      com.docker.network.bridge.name: "ip6br1"
+      com.docker.network.container_iface_prefix: "ip6br1eth"
+  ip6br2:
+    enable_ipv4: false
+    enable_ipv6: true
+    driver_opts:
+      com.docker.network.bridge.name: "ip6br2"
+      com.docker.network.container_iface_prefix: "ip6br2eth"
+  ip6br3:
+    enable_ipv4: false
+    enable_ipv6: true
+    driver_opts:
+      com.docker.network.bridge.name: "ip6br3"
+      com.docker.network.container_iface_prefix: "ip6br3eth"

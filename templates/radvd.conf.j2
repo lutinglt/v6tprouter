@@ -1,0 +1,17 @@
+interface {{ lan_ifname }} {
+  AdvSendAdvert on;
+  AdvManagedFlag off;
+  AdvOtherConfigFlag off;
+  AdvIntervalOpt on;
+
+  prefix {{ lan_prefix }}::/64 {
+    AdvOnLink on;
+    AdvAutonomous on;
+    AdvRouterAddr off;
+    {%- if expire %}
+    AdvValidLifetime 0;
+    AdvPreferredLifetime 0;
+    {%- endif %}
+  };
+};
+{#+ #}

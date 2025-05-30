@@ -1,0 +1,10 @@
+proxy {{ wan_ifname }} {
+  router yes
+  timeout 500
+  ttl 30000
+  {% for lan_prefix in lan_prefixs %}
+  rule {{ lan_prefix }}::/64 {
+    auto
+  }
+  {%- endfor %}
+}
